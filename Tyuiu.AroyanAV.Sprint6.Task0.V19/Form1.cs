@@ -1,41 +1,104 @@
+ï»¿#nullable disable
 using System;
-using System.Globalization;
+using System.Text;
 using System.Windows.Forms;
 
-namespace Tyuiu.AroyanAV.Sprint6.Task0.V19
+namespace Tyuiu.PankovaAA.Sprint6.Task0.V2
 {
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
-        public Form1()
+        private object textBoxresullt_AAV;
+        private object textBoxStart_PAA;
+        private object textBoxEnd_PAA;
+        private object textBoxstart_AAV;
+        private object textBoxStart_AAV;
+        private object textBoxEnd_AAV;
+
+        public FormMain(object textBoxresullt_AAV, object textBoxStart_PAA, object textBoxEnd_PAA, object textBoxstart_AAV)
         {
-            InitializeComponent();
-            textBoxVarX_AAV.Text = "3";
+
+            this.textBoxresullt_AAV = textBoxresullt_AAV;
+            this.textBoxStart_PAA = textBoxstart_AAV;
+            this.textBoxstart_AAV = textBoxstart_AAV;
         }
 
-        private void buttonDone_AAV_Click(object sender, EventArgs e)
+        private void ButtonCalculate_Click_PAA(object sender, EventArgs e)
         {
-            
-            if (int.TryParse(textBoxVarX_AAV.Text, out int x))
+            try
             {
-                
-                double y = -0.25 * (Math.Pow(x, 3) - 3 * Math.Pow(x, 2) + 4);
-                y = Math.Round(y, 3); 
+                int start = Convert.ToInt32(textBoxStart_AAV);
+                int end = Convert.ToInt32(textBoxEnd_AAV);
 
-                textBoxResult_AAV.Text = y.ToString("F3", CultureInfo.InvariantCulture);
+                if (start > end)
+                {
+                    MessageBox.Show("Ð¡Ñ‚Ð°Ñ€Ñ‚ ÑˆÐ°Ð³Ð° Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ Ð¼ÐµÐ½ÑŒÑˆÐµ Ð¸Ð»Ð¸ Ñ€Ð°Ð²ÐµÐ½ ÐºÐ¾Ð½Ñ†Ñƒ ÑˆÐ°Ð³Ð°");
+                    return;
+                }
+
+                var service = new DataService();
+                double[] results = service.GetMassFunction(start, end);
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("|   X   |  F(x)  |");
+                sb.AppendLine("+-------+--------+");
+
+                for (int i = 0; i < results.Length; i++)
+                {
+                    int x = start + i;
+                    sb.AppendLine($"| {x,5} | {results[i],7:F2} |");
+                }
+                sb.AppendLine("+-------+--------+");
+
+                textBoxresullt_AAV = sb.ToString();
             }
-            else
+            catch (FormatException)
             {
-                
-                MessageBox.Show("Ââåäåíû íåâåðíûå äàííûå", "Îøèáêà",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxVarX_AAV.Focus();
+                MessageBox.Show("ÐžÑˆÐ¸Ð±ÐºÐ°: Ð²Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ†ÐµÐ»Ñ‹Ðµ Ñ‡Ð¸ÑÐ»Ð°!!", "ÐžÑˆÐ¸Ð±ÐºÐ°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ÐžÑˆÐ¸Ð±ÐºÐ°: " + ex.Message, "ÐžÑˆÐ¸Ð±ÐºÐ°", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void buttonHelp_AAV_Click(object sender, EventArgs e)
+        private void AboutMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Òàñê 0 âûïîëíèëà ñòóäåíòêà ãðóïïû ÈÑÒÍá-25-1 Àðîÿí Àðìèíå Âà÷àãàíîâíà",
-                "Ñîîáùåíèå", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Ð¢Ð°ÑÐº 1 Ð²Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ð»Ð° ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚ÐºÐ° Ð³Ñ€ÑƒÐ¿Ð¿Ñ‹ Ð˜Ð¡Ð¢ÐÐ±-25-1 ÐÑ€Ð¾ÑÐ½ ÐÑ€Ð¼Ð¸Ð½Ðµ Ð’Ð°Ñ‡Ð°Ð³Ð°Ð½Ð¾Ð²Ð½Ð°");
+        }
+    }
+
+    public class DataService
+    {
+        public double[] GetMassFunction(int startValue, int stopValue)
+        {
+            int size = stopValue - startValue + 1;
+            double[] result = new double[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                int x = startValue + i;
+                result[i] = CalculateFunction(x);
+            }
+
+            return result;
+        }
+
+        private double CalculateFunction(int x)
+        {
+            double denominator = 4 * x - 0.5;
+
+            if (Math.Abs(denominator) < 0.000001)
+            {
+                return 0;
+            }
+
+            double numerator = 3 * Math.Cos(x);
+            double fraction = numerator / denominator;
+            double sinPart = Math.Sin(x);
+            double linearPart = -5 * x - 2;
+
+            double result = fraction + sinPart + linearPart;
+            return Math.Round(result, 2);
         }
     }
 }
