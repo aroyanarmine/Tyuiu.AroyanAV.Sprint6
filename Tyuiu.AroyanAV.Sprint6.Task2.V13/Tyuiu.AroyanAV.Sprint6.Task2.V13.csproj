@@ -9,9 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Chart.js" Version="3.7.1" />
-    <PackageReference Include="Chart.Mvc" Version="1.0.0.2" />
-    <PackageReference Include="SciChart" Version="8.10.0.28840" />
+    <PackageReference Include="winforms.datavisualization" Version="1.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tyuiu.AroyanAV.Sprint6.Task2.V13.Lib\Tyuiu.AroyanAV.Sprint6.Task2.V13.Lib.csproj" />
   </ItemGroup>
 
 </Project>

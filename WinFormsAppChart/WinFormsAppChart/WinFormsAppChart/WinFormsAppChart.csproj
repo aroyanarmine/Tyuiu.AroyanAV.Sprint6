@@ -9,9 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Chart.js" Version="3.7.1" />
-    <PackageReference Include="Chart.Mvc" Version="1.0.0.2" />
-    <PackageReference Include="SciChart" Version="8.10.0.28840" />
+    <PackageReference Include="WinForms.DataVisualization" Version="1.9.2" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿namespace Tyuiu.AroyanAV.Sprint6.Task0.V19
+﻿
+namespace Tyuiu.AroyanAV.Sprint6.Task0.V19
 {
     partial class Form1
     {
@@ -173,6 +174,11 @@
             groupBoxResualt_AAV.ResumeLayout(false);
             groupBoxResualt_AAV.PerformLayout();
             ResumeLayout(false);
+        }
+
+        private void SuspendLayout()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
